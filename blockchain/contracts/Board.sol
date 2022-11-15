@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-import "./Thread.sol";
+import "./Task.sol";
 
-contract Board{
+contract BoardContract is TaskContract{
     uint id;
     uint name;
     string icon;
     int[] threads;
     int[] collaborators;
+
+    
 }

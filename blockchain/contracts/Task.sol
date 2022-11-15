@@ -3,17 +3,26 @@ pragma solidity ^0.8.6;
 
 import "./User.sol";
 
+/// @title A contract for creating Task
+/// @author Nikit Khakholia 😎
+/// @notice This contract has a Task data structure which is kept in a mapping and a taskCount variable to store the no tasks present in the mapping.
 contract TaskContract is UserContract {
+    struct SubTask {
+        bool completed;
+        string name;
+        string description;
+        uint256 assignedTo;
+    }
     struct Task {
         uint256 id;
-        uint256 createdBy;
-        uint256 assignedTo;
+        address createdBy;
+        address assignedTo;
         uint8 priority;
         bool completed;
         bool pinned;
         string name;
         string description;
-        Task[] subTask;
+        SubTask[] subTasks;
         string[] labels;
         uint256 dueOn;
         uint256 remindOn;
@@ -21,11 +30,21 @@ contract TaskContract is UserContract {
     uint256 taskCount = 0;
     mapping(uint256 => Task) tasks;
 
+    /// @notice Checks if Task is created by the sender
+    /// @param _taskId Id of Task to be checked
+    /// @dev Checks msg.sender to the task's createdBy
     modifier isCreator(uint256 _taskId) {
-        require(msg.sender == getUserAddress(tasks[_taskId].createdBy), "Failed! Task not created by you.");
+        require(
+            msg.sender == tasks[_taskId].createdBy,
+            "Failed! Task not created by you."
+        );
         _;
     }
 
+    /// @notice Updates name of an existing Task
+    /// @param _name New name to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
     function setName(string calldata _name, uint256 _taskId)
         public
         isCreator(_taskId)
@@ -33,6 +52,10 @@ contract TaskContract is UserContract {
         tasks[_taskId].name = _name;
     }
 
+    /// @notice Updates description of an existing Task
+    /// @param _description New description to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's description with given _description
     function setDescription(string calldata _description, uint256 _taskId)
         public
         isCreator(_taskId)
@@ -40,7 +63,98 @@ contract TaskContract is UserContract {
         tasks[_taskId].description = _description;
     }
 
-    function setLabels(string[] calldata _labels, uint256 _taskId) public {
+    /// @notice Updates labels of an existing Task
+    /// @param _labels Array of labels to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's labels with given _labels
+    function setLabels(string[] calldata _labels, uint256 _taskId)
+        public
+        userExist
+    {
         tasks[_taskId].labels = _labels;
+    }
+
+    /// @notice Creates a task
+    /// @param _createdBy Creator of task
+    /// @param _assignedTo Assignee of Task
+    /// @param _priority Priority of Task
+    /// @param _completed Completion Status of Task
+    /// @param _pinned Pinned Status of Task
+    /// @param _name Name of Task
+    /// @param _description Description of Task
+    /// @param _subTasks SubTasks if any of Task
+    /// @param _labels Labels of Task
+    /// @param _dueOn Due Time of Task
+    /// @param _remindOn Reminder Time of Task
+    /// @dev Creates a new task with a id generated internally
+    function _createTask(
+        address _createdBy,
+        address _assignedTo,
+        uint8 _priority,
+        bool _completed,
+        bool _pinned,
+        string calldata _name,
+        string calldata _description,
+        SubTask[] memory _subTasks,
+        string[] calldata _labels,
+        uint256 _dueOn,
+        uint256 _remindOn
+    ) internal userExist returns (uint256 _taskId) {
+        taskCount++;
+        tasks[taskCount] = Task(
+            taskCount,
+            _createdBy,
+            _assignedTo,
+            _priority,
+            _completed,
+            _pinned,
+            _name,
+            _description,
+            _subTasks,
+            _labels,
+            _dueOn,
+            _remindOn
+        );
+        _taskId = taskCount;
+    }
+ 
+    /// @notice Creates a task    
+    /// @param _name Name of Task
+    /// @param _description Description of Task
+    /// @param _dueOn Due Time of Task
+    /// @param _remindOn Reminder Time of Task
+    /// @param _priority Priority of Task
+    /// @param _labels Labels of Task
+    /// @dev Creates a new task with msg.sender as the creator and assignee, completed and pinned as false and 0 sub tasks where id is generated internally
+    function createTask(
+        string calldata _name,
+        string calldata _description,
+        uint256 _dueOn,
+        uint256 _remindOn,
+        uint8 _priority,
+        string[] calldata _labels
+    ) public userExist returns (uint256 _taskId) {
+        require(
+            _dueOn > block.timestamp || _dueOn == 0,
+            "Failed! Please select a future due date."
+        );
+        require(
+            _remindOn > block.timestamp || _remindOn == 0,
+            "Failed! Please select a future remind date."
+        );
+
+        _taskId = _createTask(
+            msg.sender,
+            msg.sender,
+            _priority,
+            false,
+            false,
+            _name,
+            _description,
+            new SubTask[](0),
+            _labels,
+            _dueOn,
+            _remindOn
+        );
     }
 }
