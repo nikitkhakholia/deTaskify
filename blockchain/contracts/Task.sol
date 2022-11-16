@@ -82,7 +82,6 @@ contract TaskContract is UserContract {
     /// @param _pinned Pinned Status of Task
     /// @param _name Name of Task
     /// @param _description Description of Task
-    /// @param _subTasks SubTasks if any of Task
     /// @param _labels Labels of Task
     /// @param _dueOn Due Time of Task
     /// @param _remindOn Reminder Time of Task
@@ -93,12 +92,11 @@ contract TaskContract is UserContract {
         uint8 _priority,
         bool _completed,
         bool _pinned,
-        string calldata _name,
-        string calldata _description,
-        SubTask[] memory _subTasks,
-        string[] calldata _labels,
         uint256 _dueOn,
-        uint256 _remindOn
+        uint256 _remindOn,
+        string[] calldata _labels,
+        string memory _name,
+        string memory _description
     ) internal userExist returns (uint256 _taskId) {
         taskCount++;
         tasks[taskCount] = Task(
@@ -110,7 +108,7 @@ contract TaskContract is UserContract {
             _pinned,
             _name,
             _description,
-            _subTasks,
+            new SubTask[](0),
             _labels,
             _dueOn,
             _remindOn
@@ -127,8 +125,8 @@ contract TaskContract is UserContract {
     /// @param _labels Labels of Task
     /// @dev Creates a new task with msg.sender as the creator and assignee, completed and pinned as false and 0 sub tasks where id is generated internally
     function createTask(
-        string calldata _name,
-        string calldata _description,
+        string memory _name,
+        string memory _description,
         uint256 _dueOn,
         uint256 _remindOn,
         uint8 _priority,
@@ -149,12 +147,30 @@ contract TaskContract is UserContract {
             _priority,
             false,
             false,
-            _name,
-            _description,
-            new SubTask[](0),
-            _labels,
             _dueOn,
-            _remindOn
+            _remindOn,
+            _labels,
+            _name,
+            _description            
         );
+    }
+
+    function getTasksByCreator()public view returns(Task[] memory){
+        uint createdCount=0;
+        for(uint i=0; i<taskCount; i++){
+            if(tasks[i].createdBy==msg.sender){
+                createdCount++;
+            }
+        }
+        Task[] memory _tasks = new Task[](createdCount);
+        uint count=0;
+        for(uint i=0; i<taskCount; i++){
+            if(tasks[i].createdBy==msg.sender){
+                _tasks[count]=tasks[i];
+                count++;
+            }
+        }
+        return _tasks;
+
     }
 }
