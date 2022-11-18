@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.17;
 
 import "./User.sol";
 
@@ -7,23 +7,29 @@ import "./User.sol";
 /// @author Nikit Khakholia 😎
 /// @notice This contract has a Task data structure which is kept in a mapping and a taskCount variable to store the no tasks present in the mapping.
 contract TaskContract is UserContract {
+    struct Label{
+        address userAddress;
+        string name;
+    }
     struct SubTask {
+        uint id;
         bool completed;
         string name;
         string description;
-        uint256 assignedTo;
+        address assignedTo;
     }
     struct Task {
         uint256 id;
         address createdBy;
         address assignedTo;
-        uint8 priority;
         bool completed;
         bool pinned;
         string name;
         string description;
+        uint8 priority;
+        uint8 subTasksCount;
         SubTask[] subTasks;
-        string[] labels;
+        Label[] labels;
         uint256 dueOn;
         uint256 remindOn;
     }
@@ -39,6 +45,134 @@ contract TaskContract is UserContract {
             "Failed! Task not created by you."
         );
         _;
+    }
+
+    /// @notice Checks if Task is created by the sender
+    /// @param _taskId Id of Task to be checked
+    /// @dev Checks msg.sender to the task's createdBy
+    modifier isAssignee(uint256 _taskId) {
+        require(
+            msg.sender == tasks[_taskId].assignedTo ||
+                msg.sender == tasks[_taskId].createdBy,
+            "Failed! Task not assigned to you."
+        );
+        _;
+    }
+
+    /// @notice Updates name of an existing Task
+    /// @param _priority New label by the user to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function updatePriority(uint8 _priority, uint256 _taskId)
+        public
+        isAssignee(_taskId)
+    {
+           
+    }
+    /// @notice Updates name of an existing Task
+    /// @param _name name of sub task
+    /// @param _description description of subtask
+    /// @param _assignedTo task assigned to
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function addSubtask(
+        string calldata _name,
+        string calldata _description,
+        address _assignedTo,
+        uint256 _taskId
+    ) public isAssignee(_taskId) {
+        require(
+            chekUserExist(_assignedTo),
+            "Please ask the user to register first."
+        );
+        tasks[_taskId].subTasksCount++;
+        tasks[_taskId].subTasks.push(
+            SubTask({
+                id: tasks[_taskId].subTasksCount,
+                completed: false,
+                name: _name,
+                description: _description,
+                assignedTo: _assignedTo
+            })
+        );
+    }
+
+    /// @notice Updates name of an existing Task
+    /// @param _name name of sub task
+    /// @param _description description of subtask
+    /// @param _assignedTo task assigned to
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function updateSubtask(
+        uint8 _subTaskId,
+        bool _completed,
+        string calldata _name,
+        string calldata _description,
+        address _assignedTo,
+        uint256 _taskId
+    ) public isAssignee(_taskId) {
+        require(
+            chekUserExist(_assignedTo),
+            "Please ask the user to register first."
+        );
+        for (uint x = 0; x < tasks[_taskId].subTasksCount; x++) {
+            if (tasks[_taskId].subTasks[x].id == _subTaskId) {
+                tasks[_taskId].subTasks[x].name = _name;
+                tasks[_taskId].subTasks[x].description = _description;
+                tasks[_taskId].subTasks[x].assignedTo = _assignedTo;
+                tasks[_taskId].subTasks[x].completed = _completed;
+            }
+        }
+    }
+
+    /// @notice Updates name of an existing Task
+    /// @param _name New label by the user to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function addLabels(string calldata _name, uint256 _taskId)
+        public
+        isAssignee(_taskId)
+    {
+        tasks[_taskId].labels.push(Label(msg.sender, _name));
+    }
+    /*
+    /// @notice Updates name of an existing Task
+    /// @param _index index of label to be removed
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function removeLabels(uint _index, uint256 _taskId)
+        public
+        isAssignee(_taskId)
+    {
+        Label[] storage labels = new Label[](10);
+        for(uint x = 0; x<tasks[_taskId].labels.length; x++){
+            if(tasks[_taskId].labels[x].userAddress==msg.sender && x!= _index){
+                labels.push(tasks[_taskId].labels[x]);
+            }
+
+        }
+    }
+    */
+    /// @notice Updates name of an existing Task
+    /// @param _dueOn New due time to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function updateDueOn(uint256 _dueOn, uint256 _taskId)
+        public
+        isAssignee(_taskId)
+    {
+        tasks[_taskId].dueOn = _dueOn;
+    }
+
+    /// @notice Updates name of an existing Task
+    /// @param _remindOn New remiander time to be updated
+    /// @param _taskId Id of Task to be updated
+    /// @dev Updates task's name with given _name
+    function updateRemindOn(uint256 _remindOn, uint256 _taskId)
+        public
+        isAssignee(_taskId)
+    {
+        tasks[_taskId].remindOn = _remindOn;
     }
 
     /// @notice Updates name of an existing Task
@@ -63,17 +197,7 @@ contract TaskContract is UserContract {
         tasks[_taskId].description = _description;
     }
 
-    /// @notice Updates labels of an existing Task
-    /// @param _labels Array of labels to be updated
-    /// @param _taskId Id of Task to be updated
-    /// @dev Updates task's labels with given _labels
-    function setLabels(string[] calldata _labels, uint256 _taskId)
-        public
-        userExist
-    {
-        tasks[_taskId].labels = _labels;
-    }
-
+    /*
     /// @notice Creates a task
     /// @param _createdBy Creator of task
     /// @param _assignedTo Assignee of Task
@@ -97,7 +221,7 @@ contract TaskContract is UserContract {
         string[] calldata _labels,
         string memory _name,
         string memory _description
-    ) internal userExist returns (uint256 _taskId) {
+    ) public userExist returns (uint256 _taskId) {
         taskCount++;
         tasks[taskCount] = Task(
             taskCount,
@@ -115,8 +239,8 @@ contract TaskContract is UserContract {
         );
         _taskId = taskCount;
     }
- 
-    /// @notice Creates a task    
+
+    /// @notice Creates a task
     /// @param _name Name of Task
     /// @param _description Description of Task
     /// @param _dueOn Due Time of Task
@@ -140,7 +264,7 @@ contract TaskContract is UserContract {
             _remindOn > block.timestamp || _remindOn == 0,
             "Failed! Please select a future remind date."
         );
-
+abi.decode(data, (string, string))
         _taskId = _createTask(
             msg.sender,
             msg.sender,
@@ -151,26 +275,26 @@ contract TaskContract is UserContract {
             _remindOn,
             _labels,
             _name,
-            _description            
+            _description
         );
     }
+*/
 
-    function getTasksByCreator()public view returns(Task[] memory){
-        uint createdCount=0;
-        for(uint i=0; i<taskCount; i++){
-            if(tasks[i].createdBy==msg.sender){
+    function getTasksByCreator() public view returns (Task[] memory) {
+        uint createdCount = 0;
+        for (uint i = 0; i < taskCount; i++) {
+            if (tasks[i].createdBy == msg.sender) {
                 createdCount++;
             }
         }
         Task[] memory _tasks = new Task[](createdCount);
-        uint count=0;
-        for(uint i=0; i<taskCount; i++){
-            if(tasks[i].createdBy==msg.sender){
-                _tasks[count]=tasks[i];
+        uint count = 0;
+        for (uint i = 0; i < taskCount; i++) {
+            if (tasks[i].createdBy == msg.sender) {
+                _tasks[count] = tasks[i];
                 count++;
             }
         }
         return _tasks;
-
     }
 }
