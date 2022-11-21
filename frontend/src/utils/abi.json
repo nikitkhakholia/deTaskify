@@ -1,0 +1,487 @@
+[
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "addLabels",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_description",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_assignedTo",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "addSubtask",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTasksByAssignee",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "createdBy",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "assignedTo",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "completed",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "pinned",
+              "type": "bool"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint8",
+              "name": "priority",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "subTasksCount",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "id",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "completed",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "description",
+                  "type": "string"
+                },
+                {
+                  "internalType": "address",
+                  "name": "assignedTo",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct TaskContract.SubTask[]",
+              "name": "subTasks",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "userAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct TaskContract.Label[]",
+              "name": "labels",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dueOn",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "remindOn",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct TaskContract.Task[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTasksByCreator",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "createdBy",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "assignedTo",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "completed",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "pinned",
+              "type": "bool"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            },
+            {
+              "internalType": "uint8",
+              "name": "priority",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint8",
+              "name": "subTasksCount",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "id",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "bool",
+                  "name": "completed",
+                  "type": "bool"
+                },
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "description",
+                  "type": "string"
+                },
+                {
+                  "internalType": "address",
+                  "name": "assignedTo",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct TaskContract.SubTask[]",
+              "name": "subTasks",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "address",
+                  "name": "userAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "name",
+                  "type": "string"
+                }
+              ],
+              "internalType": "struct TaskContract.Label[]",
+              "name": "labels",
+              "type": "tuple[]"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dueOn",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "remindOn",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct TaskContract.Task[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        }
+      ],
+      "name": "newUser",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_assignee",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateAssignee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "_completed",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateCompleted",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateDescription",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_dueOn",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateDueOn",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateName",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "_pinned",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updatePinned",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "_priority",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updatePriority",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_remindOn",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateRemindOn",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint8",
+          "name": "_subTaskId",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bool",
+          "name": "_completed",
+          "type": "bool"
+        },
+        {
+          "internalType": "string",
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_description",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "_assignedTo",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_taskId",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateSubTask",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]
