@@ -1,31 +1,14 @@
-import { useEffect } from 'react'
-import { contract, abi } from '../utils/utils'
 import './TaskManager.css'
 import addIcon from '../assets/add.svg'
 import { useState } from 'react'
 import Task from './Task'
 import AddTask from './AddTask'
-const Web3 = require('web3')
-const web3 = new Web3('ws://localhost:8545')
+
 
 const TaskManager = () => {
-  var TaskContract = new web3.eth.Contract(abi, contract)
-  const [tasks, setTasks] = useState([])
-  useEffect(() => {
-    console.log('Requesting account...')
-    if (typeof web3 !== 'undefined') {
-      console.log('Found')
-      TaskContract.methods.getTasksByAssignee().call((err, result) => {
-        if (!err) {
-          setTasks(result)
-        } else {
-          console.log(err)
-        }
-      })
-    } else {
-      console.log('No web3 provider found..')
-    }
-  }, [])
+  const [tasks, setTasks] = useState(["x"])
+  
+  
 
   return (
     <div
@@ -93,7 +76,7 @@ const TaskManager = () => {
             </div>
 
             <div className="grow overscroll-auto">
-              {!tasks ? (
+              {tasks.length===0 ? (
                 <p className="italic">No tasks scheduled for today.</p>
               ) : (
                 <div
