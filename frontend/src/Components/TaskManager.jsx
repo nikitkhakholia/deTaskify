@@ -10,38 +10,10 @@ const TaskManager = () => {
   return (
     <div
       className="
-      min-h-screen
-      bg-black text-white
+      
       "
     >
-      <div
-        className="
-        p-2 px-4
-        font-bold text-3xl text-center
-        border-b-2 border-neutral-900
-        flex justify-between items-center
-        "
-      >
-        <div className="tw-mx-4 tw-my-3">
-          <div
-            className="hamburger"
-            id="hamburger-1"
-            onClick={(e) => {
-              document
-                .getElementById('hamburger-1')
-                .classList.toggle('is-active')
-            }}
-          >
-            <span className="line"></span>
-            <span className="line"></span>
-            <span className="line"></span>
-          </div>
-        </div>
-        <h1>
-          <span className="italic">de</span>Taskify
-        </h1>
-        <div>B</div>
-      </div>
+      
       <div
         className="
       flex h-screen

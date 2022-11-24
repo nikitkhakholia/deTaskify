@@ -2,7 +2,7 @@
 pragma solidity ^0.8.6;
 
 contract UserContract {
-    uint userCount = 0;
+    uint public userCount = 0;
 
     struct User {
         address userAddress;
@@ -19,21 +19,36 @@ contract UserContract {
         }
     }
 
-    function newUser(string calldata _name) public returns (uint) {
-        userCount++;
-        users[userCount] = User(msg.sender, _name, userCount);
-        return userCount;
+    function newUser(string calldata _name) public returns (uint _userId) {
+        bool _exist = false;
+        for (uint i = 1; i <= userCount; i++) {
+            if (users[i].userAddress == msg.sender) {
+                _exist = true;
+                _userId = i;
+                break;
+            }
+        }
+
+        if (!_exist) {
+            userCount++;
+            users[userCount] = User(msg.sender, _name, userCount);
+            _userId = userCount;
+        }
     }
 
     // function getUserAddress(uint _userId) internal view returns (address) {
     //     return users[_userId].userAddress;
     // }
 
-    function chekUserExist(address _userAddress) internal view returns(bool _exist){
-        _exist=false;
+    function chekUserExist(address _userAddress)
+        internal
+        view
+        returns (bool _exist)
+    {
+        _exist = false;
         for (uint i = 1; i <= userCount; i++) {
             if (users[i].userAddress == _userAddress) {
-                _exist=true;
+                _exist = true;
                 break;
             }
         }
