@@ -8,7 +8,7 @@ const web3 = new Web3('ws://localhost:8545')
 export function AccountProvider({ children }) {
   
   var TaskContract = new web3.eth.Contract(abi, contract)
-
+console.log(abi);
   const [account, setAccount] = useState('')
 
   const MMSDK = new MetaMaskSDK({
@@ -23,12 +23,10 @@ export function AccountProvider({ children }) {
     console.log('Requesting account...')
     if (typeof web3 !== 'undefined') {
       console.log('Found')
-      TaskContract.methods.getTasksByCreator().call((e, d)=>{
-        console.log("xx");
-        console.log(e);
-        console.log(d);
-      })
       
+      TaskContract.methods.newUser("Nikit").call((e, d)=>{
+        console.log(d);
+    })
     } else {
       console.log('No web3 provider found..')
     }

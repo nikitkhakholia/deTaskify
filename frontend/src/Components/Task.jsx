@@ -5,8 +5,14 @@ import labelIcon from '../assets/label.svg'
 import priorityIcon from '../assets/priority.svg'
 
 import calendarIcon from '../assets/calendar.svg'
+import { useContext } from 'react'
+import AccountContext from '../Contexts/AccountContext'
 
 const Task = ({ task }) => {
+
+  const {Chain} = useContext(AccountContext);
+
+
   return (
     <div
       className="

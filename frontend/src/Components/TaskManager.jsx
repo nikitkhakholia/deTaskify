@@ -4,11 +4,8 @@ import { useState } from 'react'
 import Task from './Task'
 import AddTask from './AddTask'
 
-
 const TaskManager = () => {
-  const [tasks, setTasks] = useState(["x"])
-  
-  
+  const [tasks, setTasks] = useState(['x'])
 
   return (
     <div
@@ -67,6 +64,12 @@ const TaskManager = () => {
                     document
                       .getElementById('addTask')
                       .classList.toggle('hidden')
+                    document
+                      .getElementById('task-space')
+                      .classList.toggle('blur-3xl')
+                    document
+                      .getElementById('task-space')
+                      .classList.toggle('pointer-events-none')
                   }}
                 />
               </div>
@@ -75,8 +78,8 @@ const TaskManager = () => {
               <AddTask />
             </div>
 
-            <div className="grow overscroll-auto">
-              {tasks.length===0 ? (
+            <div id="task-space" className="grow overscroll-auto">
+              {tasks.length === 0 ? (
                 <p className="italic">No tasks scheduled for today.</p>
               ) : (
                 <div

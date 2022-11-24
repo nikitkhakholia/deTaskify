@@ -5,21 +5,27 @@ import labelIcon from '../assets/label.svg'
 import priorityIcon from '../assets/priority.svg'
 
 import calendarIcon from '../assets/calendar.svg'
+import { useContext } from 'react'
+import AccountContext from '../Contexts/AccountContext'
 const AddTask = () => {
-  
+
+  const {Chain} = useContext(AccountContext);
+
   return (
     <div
       className="
-      bg-neutral-900 rounded-md p-4 m-1
-      shadow-white drop-shadow
+      bg-black rounded-md p-4 m-1
+      shadow-white drop-shadow         
+      border-2 border-neutral-900
+
       "
     >
       <div>
         <input
           className="
-        bg-neutral-900 border-b-2 border-neutral-900 
+        bg-black border-b-2 border-neutral-900 
         focus:border-white focus:outline-none
-        placeholder-white
+        placeholder-white p-2
         "
           placeholder="Name"
         />
@@ -27,11 +33,16 @@ const AddTask = () => {
       <div>
         <input
           className="
-        bg-neutral-900 border-b-2 border-neutral-900 
+        bg-black border-b-2 border-neutral-900 
         focus:border-white focus:outline-none
-        placeholder-white
+        placeholder-white p-2 mt-2
         "
           placeholder="Description"
+          onBlur={e=>{
+            Chain.getTasksByCreator().call((e, d)=>{
+              console.log(d);
+            })
+          }}
         />
       </div>
       <div className="flex justify-center items-center pt-4">
@@ -68,6 +79,16 @@ const AddTask = () => {
           />
         </div>
       </div>
+      <div className='
+      p-2 w-100 mt-4 rounded text-center
+      bg-black
+      border-2 border-neutral-900
+
+      '
+      onClick={e=>{
+        Chain.getTasksByCreator().call((e, d)=>{
+          console.log(d);
+      })}}>Save</div>
     </div>
   )
 }
