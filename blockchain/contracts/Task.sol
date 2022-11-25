@@ -191,7 +191,6 @@ contract TaskContract is UserContract {
         tasks[_taskId].labels.push(Label(msg.sender, _name));
     }
 
-    /*
     /// @notice Updates name of an existing Task
     /// @param _index index of label to be removed
     /// @param _taskId Id of Task to be updated
@@ -200,17 +199,16 @@ contract TaskContract is UserContract {
         public
         isAssignee(_taskId)
     {
-        // Label[] memory _labels = tasks[_taskId].labels;
-        // tasks[_taskId].labels=new Label[](0);
+        Label[] memory _labels = tasks[_taskId].labels;
+        tasks[_taskId].labels=new Label[](0);
         for(uint x = 0; x<10; x++){
             if(x!=_index){
-                // tasks[_taskId].labels.push(_labels[x]);
+                tasks[_taskId].labels.push(_labels[x]);
             }
         }
 
     }
     
-    */
 
     /// @notice Updates due time of an existing Task
     /// @param _dueOn New due time to be updated
